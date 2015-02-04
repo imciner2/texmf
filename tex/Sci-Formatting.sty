@@ -1,0 +1,39 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Latex commands and environments to assist in writing scientific
+% papers/reports
+%   Authored by Ian McInerney
+%		Version:
+%			1.0 - Initial release
+%			1.1 - Added environment for a circuit schematic
+%			1.2 - Converted to .sty file
+%
+% This file is released under the Creative Commons BY-SA 4.0 license.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\sub}[1]{$_{#1}$}
+\newcommand{\imag}{\text{j}}
+\newcommand{\magni}[1]{|#1|}
+
+% Copied from http://tex.stackexchange.com/questions/43008/absolute-value-symbols
+% These lines will create an absolute value and normalize display function
+\usepackage{mathtools}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+
+% Swap the definition of \abs* and \norm*, so that \abs
+% and \norm resizes the size of the brackets, and the 
+% starred version does not.
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+%
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\makeatother
+
+% This will create a new figure environment for circuits (caption starts with Circuit, different table, etc)
+\DeclareFloatingEnvironment{schematic}
+
+% This will create a new command to negate a logic variable
+\newcommand{\invert}[1]{$\overline{\text{#1}}$}

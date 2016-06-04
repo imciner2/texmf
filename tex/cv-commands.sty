@@ -168,10 +168,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Environment to provide citations to publications
+% \renewcommand will remove the references header from the bibliography
 
 \newenvironment{citations}[1]
-{\blocktitle{#1}\begin{minipage}{\textwidth}}
-{\end{minipage}}
+{\blocktitle{#1}\begin{minipage}{\textwidth}\begingroup\renewcommand{\section}[2]{}}
+{\endgroup\end{minipage}}
 
 %%%%%%
 \endinput

@@ -6,11 +6,12 @@
 %			1.1 - Made tables into longtables environment so they break across pages
 %			1.2 - Added ability to have something on every page but the last one
 %			1.3 - Converted to .sty file
+%			1.4 - Added sections for citations
 %
 % This file is released under the Creative Commons BY-SA 4.0 license.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ProvidesPackage{cv-commands}[2015/02/02 version 1.3 Resume Commands]
+\ProvidesPackage{cv-commands}[2016/06/03 version 1.4 Resume Commands]
 
 \RequirePackage{zref-abspage,zref-lastpage}	% Allow for determination of last page
 \RequirePackage[dvipsnames,usenames]{color}
@@ -73,6 +74,9 @@
 % Insert pre-defined whitespace into the document
 \newcommand{\largeskip}[0]{\vspace{2.5mm}\\}
 \newcommand{\shortskip}[0]{\vspace{0.4mm}\\}
+
+\newcommand{\largeskipnoline}[0]{\vspace{2.5mm}}
+\newcommand{\shortskipnoline}[0]{\vspace{0.4mm}}
 
 % small caps
 \newcommand{\smcp}[1]{\sc{\myfonta{#1}}}
@@ -163,6 +167,15 @@
 {\end{tabular}}
 \newcommand{\interest}[1]{
 ~\raisebox{1mm}{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Environment to provide citations to publications
+% \renewcommand will remove the references header from the bibliography
+
+\newenvironment{citations}[1]
+{\blocktitle{#1}\begin{minipage}{\textwidth}\begingroup\renewcommand{\section}[2]{}}
+{\endgroup\end{minipage}}
 
 %%%%%%
 \endinput

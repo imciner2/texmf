@@ -1,0 +1,9 @@
+{
+"Name"        : "Basic Document",
+"Author"      : "Ian McInerney",
+"Date"        : "10 27, 2016",
+"Version"     : "1.0",
+"Description" : "Template for a basic Latex document",
+"License"     : "Creative Commons BY-SA 4.0 license",
+"FilesToOpen" : "basicDocument.tex"
+}

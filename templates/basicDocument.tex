@@ -31,9 +31,23 @@
 \usepackage{subcaption}
 % These packages are all incorporated in the memoir class to one degree or another...
 
-% Include custom commands
-\usepackage{Unit-Declaration}
-\usepackage{Sci-Formatting}
+% Create a norm and abs environment
+\usepackage{mathtools}
+\usepackage{newfloat}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+
+% Swap the definition of \abs* and \norm*, so that \abs
+% and \norm resizes the size of the brackets, and the 
+% starred version does not.
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\makeatother
 
 \usepackage{datetime}
 
@@ -64,5 +78,9 @@
 \begin{document}
 
 This is a basic Latex document.
+
+\begin{equation}
+	\norm{x}
+\end{equation}
 
 \end{document}

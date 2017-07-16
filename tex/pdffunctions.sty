@@ -1,0 +1,26 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Latex commands and environments to assist in PDF file creation
+% papers/reports
+%   Authored by Ian McInerney
+%		Version:
+%			1.0 - Initial release (figure page rotation)
+%
+% This file is released under the Creative Commons BY-SA 4.0 license.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ProvidesPackage{pdffunctions}[2017/07/16 v1.3 PDF Helper Functions]
+
+% Copied from https://tex.stackexchange.com/a/307097, with slight modifications
+% This will create a new command \rotateFigurePageForLabel, which will rotate the page
+% a figure is on based upon the label specified
+\RequirePackage{atbegshi}
+\RequirePackage{zref-abspage,zref-user}
+\makeatletter
+\newcommand{\rotateFigurePageForLabel}[1]{%
+  \zlabel{#1}%
+  \AtBeginShipout{%
+  \ifnum\c@abspage=\zref@extractdefault{#1}{abspage}{0}
+    \pdfpageattr{/Rotate 90}
+  \fi}
+}
+\makeatother

@@ -6,9 +6,12 @@
 %			1.0 - Initial release
 %			1.1 - Added environment for a circuit schematic
 %			1.2 - Converted to .sty file
+%			1.3 - Added figure rotation
 %
 % This file is released under the Creative Commons BY-SA 4.0 license.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ProvidesPackage{Sci-Formatting}[2017/07/16 v1.3 Scientific Formatting Tools]
 
 \newcommand{\sub}[1]{$_{#1}$}
 \newcommand{\imag}{\text{j}}
@@ -38,3 +41,18 @@
 
 % This will create a new command to negate a logic variable
 \newcommand{\invert}[1]{$\overline{\text{#1}}$}
+
+% Copied from https://tex.stackexchange.com/a/307097, with slight modifications
+% This will create a new command \rotateFigurePageForLabel, which will rotate the page
+% a figure is on based upon the label specified
+\RequirePackage{atbegshi}
+\RequirePackage{zref-abspage,zref-user}
+\makeatletter
+\newcommand{\rotateFigurePageForLabel}[1]{%
+  \zlabel{#1}%
+  \AtBeginShipout{%
+  \ifnum\c@abspage=\zref@extractdefault{#1}{abspage}{0}
+    \pdfpageattr{/Rotate 90}
+  \fi}
+}
+\makeatother

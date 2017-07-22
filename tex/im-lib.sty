@@ -1,0 +1,110 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Latex commands and environments I have found useful.
+%   Authored by Ian McInerney
+%		Version:
+%			1.0 - Initial release, combined several other libraries
+%
+% This file is released under the Creative Commons BY-SA 4.0 license.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ProvidesPackage{im-lib}[2017/07/22 v1.0 IM Library]
+
+\newcommand{\sub}[1]{$_{#1}$}
+\newcommand{\imag}{\text{j}}
+\newcommand{\magni}[1]{|#1|}
+
+% Copied from http://tex.stackexchange.com/questions/43008/absolute-value-symbols
+% These lines will create an absolute value and normalize display function
+\RequirePackage{mathtools}
+\RequirePackage{newfloat}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+
+% Swap the definition of \abs* and \norm*, so that \abs
+% and \norm resizes the size of the brackets, and the 
+% starred version does not.
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+%
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+
+% This will create a new figure environment for circuits (caption starts with Circuit, different table, etc)
+\DeclareFloatingEnvironment{schematic}
+
+% This will create a new command to negate a logic variable
+\newcommand{\invert}[1]{$\overline{\text{#1}}$}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Table of contents / Lists helper functions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage[titles]{tocloft}
+
+% Allow for the text infront of the TOC/list entry numbers to be changed inside the document
+% Argument 1: table/list (ie toc, lot, lof, etc.)
+% Argument 2: New name
+% Argument 3: tocloft name for the text level (ie. chap, tab, fig, etc.)
+\newcommand{\updatename}[3]{
+	% Create the start of the command string
+	\def\str{\string\cft}
+	\def\commandstring{\str#3}
+	
+	% Create the command string to modify the name
+	\def\presnumstring{presnum}
+	\def\commandpresnumstring{\commandstring\presnumstring}
+
+	% Create the command string to modify the size
+	\def\numstring{numwidth}
+	\def\commandnumstring{\commandstring\numstring}
+
+	% Add the new command strings to the desired tables/lists	
+	\addtocontents{#1}{\protect\renewcommand{\commandpresnumstring}{#2}}
+	\addtocontents{#1}{\protect\settowidth{\commandnumstring}{#2}}
+	\addtocontents{#1}{\protect\addtolength{\commandnumstring}{3em}}
+}
+
+% Fix the ragged right environment and the tocloft package to work together
+\newcommand{\tocloftraggedfix}{
+	% From: https://tex.stackexchange.com/questions/283730/left-align-toc-items-when-using-tableofcontents
+	\bgroup
+	\advance\@flushglue by \@tocrmarg
+	\xdef\@tocrmarg{\the\@flushglue}%
+	\egroup
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PDF Helper Functions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Copied from https://tex.stackexchange.com/a/307097, with slight modifications
+% This will create a new command \rotateFigurePageForLabel, which will rotate the page
+% a figure is on based upon the label specified
+\RequirePackage{atbegshi}
+\RequirePackage{zref-abspage,zref-user}
+\RequirePackage{pdflscape}
+
+\newcommand{\rotateFigurePageForLabel}[1]{%
+	\zlabel{#1}%
+	\AtBeginShipout{%
+		\ifnum\c@abspage=\zref@extractdefault{#1}{abspage}{0}
+		\pdfpageattr{/Rotate 90}
+		\fi}
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting helper functions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Make the page breaks occur at nice places in the paragraphs
+% They will not occur within 3 lines of the start of end, or within 2 lines of the start of an equation
+% More information on these can be found in the etex documentation (do texdoc etex)
+\newcommand{\prettybreaks}{
+	\clubpenalties 3 100000 100000 0		% Penalize breaks before the 2nd line in a paragraph
+	\widowpenalties 3 100000 100000 0		% Penalize breaks before the 2nd to last line in a paragraph
+	\displaywidowpenalties 2 100000 0		% Penalize less than 2 lines on a page before an equation
+}

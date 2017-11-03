@@ -1,40 +1,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Latex commands and environments I have found useful.
+%
+% This library is for normal documents
+%
 %   Authored by Ian McInerney
 %		Version:
 %			1.0 - Initial release, combined several other libraries
+%			1.1 - Renamed file and split off general parts
 %
 % This file is released under the Creative Commons BY-SA 4.0 license.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ProvidesPackage{im-lib}[2017/07/22 v1.0 IM Library]
+\ProvidesPackage{im-lib-doc}[2017/07/22 v1.1 IM Library]
 
-\newcommand{\sub}[1]{$_{#1}$}
-\newcommand{\imag}{\text{j}}
-\newcommand{\magni}[1]{|#1|}
-
-% Copied from http://tex.stackexchange.com/questions/43008/absolute-value-symbols
-% These lines will create an absolute value and normalize display function
-\RequirePackage{mathtools}
-\RequirePackage{newfloat}
-
-\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
-\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
-
-% Swap the definition of \abs* and \norm*, so that \abs
-% and \norm resizes the size of the brackets, and the 
-% starred version does not.
-\let\oldabs\abs
-\def\abs{\@ifstar{\oldabs}{\oldabs*}}
-%
-\let\oldnorm\norm
-\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
-
-% This will create a new figure environment for circuits (caption starts with Circuit, different table, etc)
-\DeclareFloatingEnvironment{schematic}
-
-% This will create a new command to negate a logic variable
-\newcommand{\invert}[1]{$\overline{\text{#1}}$}
+% Use the general library components
+\RequirePackage{im-lib-general}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,9 @@
+{
+"Name"        : "Imperial College London Slide Template",
+"Author"      : "Jan Eichstaedt",
+"Date"        : "June 2017",
+"Version"     : "1.0",
+"Description" : "Template for a Beamer slide presentation using the Imperial College slide design",
+"License"     : "",
+"FilesToOpen" : "main.tex"
+}

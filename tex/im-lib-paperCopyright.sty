@@ -1,0 +1,45 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Latex commands and environments to make copyright notices
+% on papers
+%
+%   Authored by Ian McInerney
+%		Version:
+%			1.0 - Initial release
+%
+% This file is released under the Creative Commons BY-SA 4.0 license.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ProvidesPackage{im-lib-paperCopyright}[2019/01/22 v1.0 IM Library for various author copyright statements]
+
+\RequirePackage{tikz}
+% Disable the internal linking of the hyperref package
+\RequirePackage[implicit=false]{hyperref}
+
+% Create a command to place copyright text into the document of an IEEE paper
+% The command goes: \IEEEcopyrightnotice{year}{doi}
+\newcommand{\IEEEcopyrighttext}[2]{%
+  \def\doiurl{https://doi.org/#2}
+  \footnotesize \textcopyright #1 IEEE. Personal use of this material is permitted.
+  Permission from IEEE must be obtained for all other uses, in any current or future
+  media, including reprinting/republishing this material for advertising or promotional
+  purposes, creating new collective works, for resale or redistribution to servers or
+  lists, or reuse of any copyrighted component of this work in other works.
+  DOI: \href{\doiurl}{#2}}
+
+\newcommand{\IEEEcopyrightnotice}[2]{%
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=south,yshift=10pt] at (current page.south) {\fbox{\parbox{\dimexpr\textwidth-\fboxsep-\fboxrule\relax}{\IEEEcopyrighttext{#1}{#2}}}};
+\end{tikzpicture}%
+}
+
+% Create a command to place copyright text into the document of an IFAC paper
+% The command goes: \IFACcopyrightnotice{year}{doi}{publicationName}
+\newcommand{\IFACcopyrighttext}[3]{%
+  \def\doiurl{https://doi.org/#2}
+  \footnotesize \textcopyright #1 IFAC. This is the author’s version of a work that was accepted for publication in #3. Changes resulting from the publishing process, such as peer review, editing, corrections, structural formatting, and other quality control mechanisms may not be reflected in this document. Changes may have been made to this work since it was submitted for publication. A definitive version was subsequently published in DOI: \href{\doiurl}{#2}}
+
+\newcommand{\IFACcopyrightnotice}[3]{%
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=south,yshift=45pt] at (current page.south) {\fbox{\parbox{\dimexpr\textwidth-\fboxsep-\fboxrule\relax}{\IFACcopyrighttext{#1}{#2}{#3}}}};
+\end{tikzpicture}%
+}

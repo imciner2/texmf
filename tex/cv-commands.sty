@@ -7,11 +7,12 @@
 %			1.2 - Added ability to have something on every page but the last one
 %			1.3 - Converted to .sty file
 %			1.4 - Added sections for citations
+%			1.5 - Modified citations section style
 %
 % This file is released under the Creative Commons BY-SA 4.0 license.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ProvidesPackage{cv-commands}[2016/06/03 version 1.4 Resume Commands]
+\ProvidesPackage{cv-commands}[2019/06/22 version 1.5 Resume Commands]
 
 \RequirePackage{zref-abspage,zref-lastpage}	% Allow for determination of last page
 \RequirePackage[dvipsnames,usenames]{color}
@@ -19,6 +20,9 @@
 \RequirePackage{graphicx}
 \RequirePackage{fancyhdr}		% Allow for fancy footer work
 \RequirePackage{amssymb}
+\RequirePackage{needspace}
+\RequirePackage[breaklinks=true]{hyperref}
+\usepackage[backend=biber,maxbibnames=99,giveninits=true,style=ieee,sorting=ydnt]{biblatex}
 
 \ProcessOptions
 \relax
@@ -28,16 +32,6 @@
 
 % This will add something to every page except the last page
 \makeatletter
-\@ifpackagelater{zref-abspage}{2013/02/09}{
-	% Define this command if it is a recent build of the package
-	\newcommand*{\iffancylastpage}{
-		\ifnum\zref@extractdefault{LastPage}{abspage}{-1}=\value{zabspage}
-			\expandafter\@firstoftwo
-		\else
-			\expandafter\@secondoftwo
-		\fi
-	}
-}{
 	\newcommand*{\iffancylastpage}{
 		\ifnum\zref@extractdefault{LastPage}{abspage}{-1}=\numexpr\value{abspage}+1\relax
 			\expandafter\@firstoftwo
@@ -45,7 +39,6 @@
 			\expandafter\@secondoftwo
 		\fi
 	}
-}
 \makeatother
 
 % No lines around the header and footers
@@ -58,8 +51,9 @@
 % starting commands
 \newfont{\myfonta}{cmr10 at 9pt}
 \newfont{\myfontb}{cmr10 at 10pt}
-\newfont{\myfontc}{cmr10 at 15pt}
-\newfont{\myfontd}{cmr10 at 12pt}
+\newfont{\myfontc}{cmr10 at 12pt}
+\newfont{\myfontd}{cmr10 at 14pt}
+\newfont{\myfonte}{cmr10 at 16pt}
 
 % Remove the excess whitespace above and below the table environments in each section
 \setlength{\LTpre}{0pt}
@@ -86,7 +80,17 @@
 \newcommand{\header}[2]{\hspace{0cm}\begin{tabular}{p{9cm}p{8cm}}{\raggedright {\headline {#1}}}& \raggedleft{#2}\end{tabular}}
 
 % Create a footer to say there is another page of information
-\newcommand{\footer}[0]{\fancyhead{}\fancyfoot{}\fancyfoot[R]{ \iffancylastpage{}{\textsc{\textit{Continued on next page}}} }}
+\newcommand{\footer}[0]
+{
+    \fancyhead{}
+    \fancyfoot{}
+    \fancyfoot[R]{
+         \iffancylastpage{}
+         {
+             \textsc{\textit{Continued on next page}}
+         }
+     }
+}
 
 % Create a header for a resume section
 \newcommand{\blocktitle}[1]{
@@ -101,61 +105,129 @@
 	\noindent
 } } }
 
-\newcommand{\headline}[1]{{\bfseries\myfontc{#1}}}
+\newcommand{\blocksection}[1]{
+\parbox{\textwidth}{
+    \vspace{2mm}
+    \noindent
+    \textcolor{MidnightBlue}{
+{\bfseries\myfontc \underline{#1}
+    \vspace*{1mm}}
+    \vspace*{3mm}
+    \noindent
+} } }
+
+\newcommand{\headline}[1]{{\bfseries\myfonte{#1}}}
 \newcommand{\setmainfont}[0]{\myfontb}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Place to put an objective statement
 
-\newcommand{\objective}[1]{\blocktitle{Objective} \begin{longtable}{p{17cm}}#1\end{longtable}}
+\newcommand{\objective}[1]
+{
+    \blocktitle{Objective}
+    \begin{longtable}{p{17cm}}
+        #1
+    \end{longtable}
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Resume block to hold the technical skills
 
-\newenvironment{largeresumeblock}[1]{\blocktitle{#1}\nopagebreak\begin{longtable}{p{4cm}p{13cm}}}{\end{longtable}}
+\newenvironment{largeresumeblock}[1]
+{
+    \blocktitle{#1}
+    \begin{longtable}{p{4cm}p{13cm}}
+}
+{
+    \end{longtable}
+}
 \newcommand{\skill}[2]{\noindent\raggedright{\textsc{#1}} & #2}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Resume block to hold non-descript resume entries (example is an education section)
 
-\newenvironment{resumeblock}[1]{\blocktitle{#1}\nopagebreak\begin{longtable}{p{13cm}p{4cm}}}{\end{longtable}}
+\newenvironment{resumeblock}[1]
+{
+    \blocktitle{#1}
+    \begin{longtable}{p{13cm}p{4cm}}
+}
+{
+    \end{longtable}
+}
 \newcommand{\resumeitem}[3]{\noindent #3 & {\textsc{#2\newline#1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Resume block to hold activities and jobs
 
-\newenvironment{activities}[1]{\blocktitle{#1}\nopagebreak\begin{longtable}{p{13cm}p{4cm}}}{\end{longtable}}
+\newenvironment{activities}[1]
+{
+    \blocktitle{#1}
+    \begin{longtable}{p{13cm}p{4cm}}
+}
+{
+    \end{longtable}
+}
 \newcommand{\activity}[5]{\hspace{-0.1in}$\circ$\hspace{0.05in}\noindent #3\newline \setlength{\parindent}{2mm} \indent\indent#4 #5 & {\textsc{#2\newline#1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Resume block to hold honors and achievements
 
-\newenvironment{achievements}{\blocktitle{Notable Achievements}\nopagebreak\begin{longtable}{p{13cm}p{4cm}}}{\end{longtable}}
+\newenvironment{achievements}
+{
+    \blocktitle{Notable Achievements}
+    \begin{longtable}{p{13cm}p{4cm}}
+}
+{
+    \end{longtable}
+}
 \newcommand{\achievement}[2]{\hspace{-0.1in}$\circ$\hspace{0.05in}\noindent\raggedright{#2} & \noindent\textsc{#1}}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Compact list to show the duties of a position
-\newenvironment{duties}{\begin{list}{$\bullet$}{\setlength\itemsep{0in}\setlength\parsep{0in}\setlength\partopsep{0in}\setlength\topsep{0in}}}{\end{list}\vspace{-3mm}}
+\newenvironment{duties}
+{
+    \begin{list}{$\bullet$}
+    {\setlength\itemsep{0in}\setlength\parsep{0in}\setlength\partopsep{0in}\setlength\topsep{0in}}
+}
+{
+    \end{list}
+    \vspace{-3mm}
+}
 \newcommand{\duty}[1]{\item #1}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Compact list to provide notes with item entries
-\newenvironment{notes}{\begin{list}{$\bullet$}{\setlength\itemsep{0in}\setlength\parsep{0in}\setlength\partopsep{0in}\setlength\topsep{0in}}}{\end{list}\vspace{-3mm}}
+\newenvironment{notes}
+{
+    \begin{list}{$\bullet$}
+    {\setlength\itemsep{0in}\setlength\parsep{0in}\setlength\partopsep{0in}\setlength\topsep{0in}}
+}
+{
+    \end{list}
+    \vspace{-3mm}
+}
 \newcommand{\note}[1]{\item \myfonta{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Environment to provide references
 
-\newenvironment{references}{\blocktitle{References}\nopagebreak\begin{longtable}{p{10cm}p{8cm}}}{\end{longtable}}
+\newenvironment{references}
+{
+    \blocktitle{References}
+    \begin{longtable}{p{10cm}p{8cm}}
+}
+{
+    \end{longtable}
+}
 \newcommand{\reference}[7]{#1 \newline #2 \newline #3 \newline #6\newline #7 & #4 \newline #5}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -163,19 +235,104 @@
 % Environment to provide interests
 
 \newenvironment{interestsblock}[1]
-{\blocktitle{#1}\begin{tabular}{p{10cm}p{10cm}}}
-{\end{tabular}}
-\newcommand{\interest}[1]{
-~\raisebox{1mm}{#1}}
+{
+    \needspace{5\baselineskip}	% Say that 5 lines should be available for the environment
+    \blocktitle{#1}
+    \begin{tabular}{p{10cm}p{10cm}}
+}
+{
+    \end{tabular}}
+    \newcommand{\interest}[1]{
+    ~\raisebox{1mm}{#1}
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Environment to provide citations to publications
-% \renewcommand will remove the references header from the bibliography
+% These two commands will highlight an authors name in bold
+% To specify the highlighting, use the annotate tag for the author:
+% author+an = {1=highlight}
+\renewcommand*{\mkbibnamegiven}[1]{%
+    \ifitemannotation{highlight}
+    { \myfontb{\bfseries{#1}} }
+    { \myfontb{#1} }
+}
+\renewcommand*{\mkbibnamefamily}[1]{%
+    \ifitemannotation{highlight}
+    { \myfontb{\bfseries{#1}} }
+    { \myfontb{#1} }
+}
 
-\newenvironment{citations}[1]
-{\blocktitle{#1}\begin{minipage}{\textwidth}\begingroup\renewcommand{\section}[2]{}}
-{\endgroup\end{minipage}}
+% Modify the DOI field to be a hyperlink if the field exists
+% These are not actually needed since by default it is a hyperlink
+%\newbibmacro{doiurl}[1]{%
+%    \iffieldundef{doi}{}{%
+%        doi:\href{http://dx.doi.org/\thefield{doi}}{#1}
+%    }
+%}
+%\DeclareFieldFormat{doi}{%
+%    \usebibmacro{doiurl}{#1}
+%}
+
+% Modify the thesis URL to remove the tag "[Online]" from it
+\newbibmacro{thesisurl}[1]{%
+    \iffieldundef{url}{}{%
+        Available: \href{\thefield{url}}{\nolinkurl{#1}}
+    }
+}
+\DeclareFieldFormat[thesis]{url}{%
+    \usebibmacro{thesisurl}{#1}
+}
+
+% Modify the patent number to be a hyperlink if the URL field is populated
+\newbibmacro{patenturl}[1]{%
+    \iffieldundef{url}{#1}{%
+        \href{\thefield{url}}{#1}
+    }
+}
+\DeclareFieldFormat[patent]{number}{%
+    \usebibmacro{patenturl}{#1}
+}
+\DeclareFieldFormat[patent]{url}{%
+}
+
+
+% Remove the dashed author lines when they are the same between two lines
+\renewbibmacro*{author}{%
+    \ifboolexpr{
+        test \ifuseauthor
+        and
+        not test {\ifnameundef{author}}
+    }
+    {%
+        \printnames{author}%
+        \iffieldundef{authortype}
+        {}
+        {%
+            \setunit{\addcomma\space}%
+            \usebibmacro{authorstrg}%
+        }%
+    }
+    {\global\undef\bbx@lasthash}%
+}
+
+% Environment to provide citations to publications
+% 1st argument is the section name
+% 2nd argument is the bibliography file
+\newenvironment{publications}[2]
+{
+%    \needspace{5\baselineskip}	% Say that 5 lines should be available for the environment
+    % Create the displayed part of the environment
+%    \blocktitle{#1}
+    \begin{refsection}[#2]
+    \defbibheading{head}{\blocksection{#1}}
+}
+{
+    % Tell it to print out the cited commands
+    \AtNextBibliography{\myfontb}
+    \printbibliography[heading=head]
+    \end{refsection}
+}
+
 
 %%%%%%
 \endinput

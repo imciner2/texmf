@@ -9,12 +9,57 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{newfloat}
-\DeclarePairedDelimiter\abs{\lvert}{\rvert}
-\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\Htwonorm}{\lVert}{\rVert_{H_2}}
+\DeclarePairedDelimiter{\Hinfnorm}{\lVert}{\rVert_{H_\infty}}
+\DeclarePairedDelimiter{\Fronorm}{\lVert}{\rVert_{F}}
+\DeclarePairedDelimiter{\Twonorm}{\lVert}{\rVert_{2}}
+\DeclarePairedDelimiter{\Onenorm}{\lVert}{\rVert_{1}}
+\DeclarePairedDelimiter{\Infnorm}{\lVert}{\rVert_{\infty}}
+\DeclarePairedDelimiter{\Maxnorm}{\lVert}{\rVert_{\text{max}}}
+\DeclarePairedDelimiter{\inv}{(}{)^{-1}}
+
+%% Custom mathematical operations
+\newcommand{\invnb}[1]{#1^{-1}}
+\newcommand{\sqrtm}[1]{#1^{\sfrac{1}{2}}}
+\newcommand{\trans}[1]{#1'}
+\newcommand{\ctrans}[1]{#1^{*}}
+\newcommand{\trace}[1]{\text{Tr}\left(#1\right)}
+\newcommand{\Linf}{\mathcal{L}^{\infty}}
+\newcommand{\Cpi}{\mathcal{\tilde{C}}_{2\pi}}
+
+\newtheoremstyle{break}% name
+  {}%         Space above, empty = `usual value'
+  {}%         Space below
+  {\itshape}% Body font
+  {}%         Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}% Thm head font
+  {.}%        Punctuation after thm head
+  {\newline}% Space after thm head: \newline = linebreak
+  {}%         Thm head spec
+
+%% Custom environment definitions
+\theoremstyle{break}
+\newtheorem{requirement}{Requirement}
+\newtheorem{proposition}{Proposition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{system}{System}
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+
 \PreviewEnvironment[]{equation}
 \PreviewEnvironment[]{equation*}
 \PreviewEnvironment[]{align}
 \PreviewEnvironment[]{align*}
+\PreviewEnvironment[]{definition}
+\PreviewEnvironment[]{definition*}
 \DeclareSymbolFont{symbolsb}{OMS}{cmsy}{m}{n}
 \SetSymbolFont{symbolsb}{bold}{OMS}{cmsy}{b}{n}
 \DeclareSymbolFontAlphabet{\mathcal}{symbolsb}

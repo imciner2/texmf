@@ -14,7 +14,7 @@
 
 \RequirePackage{tikz}
 % Disable the internal linking of the hyperref package
-\RequirePackage[implicit=false]{hyperref}
+\RequirePackage[pdftex,hypertexnames=false]{hyperref}
 
 % The background package is the main driver of the overlay
 \RequirePackage[pages=some]{background}
@@ -41,7 +41,7 @@
         opacity=1,           % No opacity
         placement=bottom,    % Bottom of the page
         nodeanchor=south,    % Anchor on the south of the background image
-        vshift=15pt,         % Shift up by 15pt
+        vshift=10pt,         % Shift up by 10pt
         contents={\copyrightBox{\IEEEcopyrighttext{#1}{#2}}}
     }
     \BgThispage
@@ -65,4 +65,3 @@
     }
     \BgThispage
 }
-

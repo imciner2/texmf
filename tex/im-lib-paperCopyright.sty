@@ -6,18 +6,66 @@
 %       Version:
 %           1.0 - Initial release
 %           1.1 - Switched to using the background package to add the boxes to the page
+%           1.2 - Introduce a nointernal option to disable internal hyperlinks, but preserve URL links
 %
 % This file is released under the Creative Commons BY-SA 4.0 license.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ProvidesPackage{im-lib-paperCopyright}[2019/01/22 v1.0 IM Library for various author copyright statements]
+\ProvidesPackage{im-lib-paperCopyright}[2020/06/23 v1.2 IM Library for various author copyright statements]
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
 
-\RequirePackage{tikz}
-% Disable the internal linking of the hyperref package
+% The background package is the main driver of the overlay containing the copyright statements
+\RequirePackage[pages=some]{background}
+
 \RequirePackage[pdftex,hypertexnames=false]{hyperref}
 
-% The background package is the main driver of the overlay
-\RequirePackage[pages=some]{background}
+
+% For the nointernal option to disable hyperlinks
+\RequirePackage{letltxmacro}[2008/06/13]
+
+% Don't place internal links, only links to outside URLs (such as the DOI)
+% This code is modified from the nohyperref style file:
+% http://chocolatshalba.ch/files/texlive/texmf-dist/tex/latex/hyperref/nohyperref.sty
+\DeclareOption{nointernal}{%
+	\let\hyper@@anchor\@gobble
+	\def\hyper@link#1#2#3{#3}%
+	\let\hyper@anchorstart\@gobble
+	\let\hyper@anchorend\@empty
+	\let\hyper@linkstart\@gobbletwo
+	\let\hyper@linkend\@empty
+%	\def\hyper@linkurl#1#2{#1}%
+	\def\hyper@linkfile#1#2#3{#1}%
+%	\def\hyper@link@[#1]#2#3{}%
+	\let\PDF@SetupDoc\@empty
+	\let\PDF@FinishDoc\@empty
+	\def\nohyperpage#1{#1}
+	\def\Acrobatmenu#1#2{\leavevmode#2}
+	\let\pdfstringdefDisableCommands\@gobbletwo
+	\let\texorpdfstring\@firstoftwo
+	\let\pdfbookmark\@undefined
+	\newcommand\pdfbookmark[3][]{}
+	\let\phantomsection\@empty
+	\let\hypersetup\@gobble
+	\let\hyperbaseurl\@gobble
+%	\newcommand*{\href}[3][]{#3}
+	\let\hyperdef\@gobbletwo
+	\let\hyperlink\@gobble
+	\let\hypertarget\@gobble
+	\def\hyperref{%
+		\@ifnextchar[\@gobbleopt{\expandafter\@gobbletwo\@gobble}%
+	}
+	\long\def\@gobbleopt[#1]{}
+	\let\hyperpage\@empty
+	\LetLtxMacro\NoHy@OrgRef\ref
+	\DeclareRobustCommand*{\ref}{%
+		\@ifstar\NoHy@OrgRef\NoHy@OrgRef
+	}
+	\LetLtxMacro\NoHy@OrgPageRef\pageref
+	\DeclareRobustCommand*{\pageref}{%
+		\@ifstar\NoHy@OrgPageRef\NoHy@OrgPageRef
+	}
+}
+\ProcessOptions
 
 % Helper definitions for creating the 
 \def\doiurl#1{\href{https://doi.org/#1}{#1}}

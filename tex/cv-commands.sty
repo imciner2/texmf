@@ -21,6 +21,7 @@
 \RequirePackage{fancyhdr}		% Allow for fancy footer work
 \RequirePackage{amssymb}
 \RequirePackage{needspace}
+\RequirePackage{enumitem}
 \RequirePackage[breaklinks=true]{hyperref}
 \usepackage[backend=biber,maxbibnames=99,giveninits=true,style=ieee,sorting=ydnt]{biblatex}
 
@@ -116,6 +117,17 @@
     \noindent
 } } }
 
+\newcommand{\blocksubsection}[1]{
+\parbox{\textwidth}{
+	\vspace{2mm}
+	\noindent
+	\textcolor{MidnightBlue}{
+{\bfseries\myfontb \underline{#1}
+	\vspace*{1mm}}
+	\vspace*{3mm}
+	\noindent
+} } }
+
 \newcommand{\headline}[1]{{\bfseries\myfonte{#1}}}
 \newcommand{\setmainfont}[0]{\myfontb}
 
@@ -151,6 +163,7 @@
 
 \newenvironment{resumeblock}[1]
 {
+	\needspace{2\baselineskip}	% Say that 2 lines should be available for the environment
     \blocktitle{#1}
     \begin{longtable}{p{13cm}p{4cm}}
 }
@@ -165,6 +178,7 @@
 
 \newenvironment{activities}[1]
 {
+	\needspace{2\baselineskip}	% Say that 2 lines should be available for the environment
     \blocktitle{#1}
     \begin{longtable}{p{13cm}p{4cm}}
 }
@@ -177,9 +191,9 @@
 
 % Resume block to hold honors and achievements
 
-\newenvironment{achievements}
+\newenvironment{achievements}[1]
 {
-    \blocktitle{Notable Achievements}
+    \blocktitle{#1}
     \begin{longtable}{p{13cm}p{4cm}}
 }
 {
@@ -193,11 +207,11 @@
 % Compact list to show the duties of a position
 \newenvironment{duties}
 {
-    \begin{list}{$\bullet$}
+    \begin{itemize}[nolistsep,noitemsep] %{$\bullet$}
     {\setlength\itemsep{0in}\setlength\parsep{0in}\setlength\partopsep{0in}\setlength\topsep{0in}}
 }
 {
-    \end{list}
+    \end{itemize}
     \vspace{-3mm}
 }
 \newcommand{\duty}[1]{\item #1}
@@ -253,13 +267,13 @@
 % author+an = {1=highlight}
 \renewcommand*{\mkbibnamegiven}[1]{%
     \ifitemannotation{highlight}
-    { \myfontb{\bfseries{#1}} }
-    { \myfontb{#1} }
+    { \textbf{#1} }
+    { #1 }
 }
 \renewcommand*{\mkbibnamefamily}[1]{%
     \ifitemannotation{highlight}
-    { \myfontb{\bfseries{#1}} }
-    { \myfontb{#1} }
+    { \textbf{#1} }
+    { #1 }
 }
 
 % Modify the DOI field to be a hyperlink if the field exists
@@ -320,15 +334,14 @@
 % 2nd argument is the bibliography file
 \newenvironment{publications}[2]
 {
-%    \needspace{5\baselineskip}	% Say that 5 lines should be available for the environment
+    \needspace{2\baselineskip}	% Say that 2 lines should be available for the environment
     % Create the displayed part of the environment
 %    \blocktitle{#1}
     \begin{refsection}[#2]
-    \defbibheading{head}{\blocksection{#1}}
+    \defbibheading{head}{\blocksubsection{#1}}
 }
 {
     % Tell it to print out the cited commands
-    \AtNextBibliography{\myfontb}
     \printbibliography[heading=head]
     \end{refsection}
 }

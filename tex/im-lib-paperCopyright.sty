@@ -7,11 +7,12 @@
 %           1.0 - Initial release
 %           1.1 - Switched to using the background package to add the boxes to the page
 %           1.2 - Introduce a nointernal option to disable internal hyperlinks, but preserve URL links
+%           1.3 - Introduce command to add a statement to IFAC open access papers, fix some bugs
 %
 % This file is released under the Creative Commons BY-SA 4.0 license.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ProvidesPackage{im-lib-paperCopyright}[2020/06/23 v1.2 IM Library for various author copyright statements]
+\ProvidesPackage{im-lib-paperCopyright}[2021/05/31 v1.3 IM Library for various author copyright statements]
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
 
 % The background package is the main driver of the overlay containing the copyright statements
@@ -28,6 +29,10 @@
 	\NR@gettitle{#6}% Insert key \nameref title grab
 	\old@ssect{#1}{#2}{#3}{#4}{#5}{#6} % Restore original \@ssect
 }
+
+
+% This is used for the DOI string generation
+\RequirePackage{ifthen}
 
 % For the nointernal option to disable hyperlinks
 \RequirePackage{letltxmacro}[2008/06/13]
@@ -76,8 +81,11 @@
 }
 \ProcessOptions\relax
 
-% Helper definitions for creating the 
+% Helper definitions for creating the DOI component
 \def\doiurl#1{\href{https://doi.org/#1}{#1}}
+\def\doinotice#1{\ifthenelse{\equal{#1}{}}{}{ DOI: \doiurl{#1}}}
+
+% The box that surrounds the copyright notice
 \def\copyrightBox#1{\fbox{\parbox{\dimexpr\textwidth-\fboxsep-\fboxrule\relax}{#1}}}
 
 % Create a command to place copyright text into the document of an IEEE paper
@@ -88,7 +96,7 @@
   media, including reprinting/republishing this material for advertising or promotional
   purposes, creating new collective works, for resale or redistribution to servers or
   lists, or reuse of any copyrighted component of this work in other works.
-  DOI: \doiurl{#2}%
+  \doinotice{#2}%
 }
 
 \newcommand{\IEEEcopyrightnotice}[2]{%
@@ -121,4 +129,24 @@
         contents={\copyrightBox{\IFACcopyrighttext{#1}{#2}{#3}}}
     }
     \BgThispage
+}
+
+
+% Create a command to place an open access copyright notice into the document of an IFAC paper
+% The command goes: \IFACopenaccessnotice{year}{doi}{publicationName}
+% Note, this must be placed _after_ the environments for the abstract and the keywords (such as immediately before the first section command)
+\newcommand{\IFACopenaccesstext}[3]{%
+	\footnotesize \textcopyright #1 the authors. This work has been accepted by IFAC for publication in #3 under a Creative Commons License CC-BY-NC-ND.\doinotice{#2}}
+
+\newcommand{\IFACopenaccessnotice}[3]{%
+	\backgroundsetup{%
+		scale=1,             % Don't scale the text
+		color=black,         % Black text
+		opacity=1,           % No opacity
+		placement=bottom,    % Bottom of the page
+		nodeanchor=south,    % Anchor on the south of the background image
+		vshift=60pt,         % Shift up by 45pt
+		contents={\copyrightBox{\IFACopenaccesstext{#1}{#2}{#3}}}
+	}
+	\BgThispage
 }

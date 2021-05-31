@@ -17,8 +17,17 @@
 % The background package is the main driver of the overlay containing the copyright statements
 \RequirePackage[pages=some]{background}
 
+% Some packages (like ifacconf) redefine how sections work, which conflicts with hyperref,
+% so we store the original way, load hyperref, then restore the original way.
+% https://tex.stackexchange.com/questions/393690/illegal-unit-of-measure-error-when-using-hyperref-in-the-ifacconf-class
+\let\old@ssect\@ssect  % Store how the original package defines \@ssect
+
 \RequirePackage[pdftex,hypertexnames=false]{hyperref}
 
+\def\@ssect#1#2#3#4#5#6{%
+	\NR@gettitle{#6}% Insert key \nameref title grab
+	\old@ssect{#1}{#2}{#3}{#4}{#5}{#6} % Restore original \@ssect
+}
 
 % For the nointernal option to disable hyperlinks
 \RequirePackage{letltxmacro}[2008/06/13]

@@ -332,6 +332,7 @@
 
 \newbibmacro*{arxiv}{%
     \iffieldundef{arxiv}{}{%
+        \setunit{\adddot\addspace}%
         \printfield{arxiv}
     }
 }

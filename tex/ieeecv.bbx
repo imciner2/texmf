@@ -57,6 +57,8 @@
 \DeclareFieldFormat[article,periodical]{volume}
   {\bibstring{jourvol}\addnbspace#1}
 
+\DeclareFieldFormat{italicparens}{(\mkbibemph{#1})}
+
 % Field for the arXiv identifier
 \DeclareDatamodelFields[type=field,datatype=verbatim,nullok=true]{arxiv}
 \DeclareDatamodelEntryfields{arxiv}

@@ -338,12 +338,12 @@
 }
 
 \DeclareFieldFormat{arxiv}{%
-    arXiv:\href{https://arxiv.org/abs/#1}{#1}
+    arXiv: \href{https://arxiv.org/abs/#1}{#1}
 }
 
 \renewbibmacro*{addendum+pubstate}{%
     \iffieldundef{pubstate}{}{%
-        \printfield[parens]{pubstate}
+        \printfield[italicparens]{pubstate}
     }
 }
 
@@ -357,7 +357,7 @@
 %    \blocktitle{#1}
     \begin{refsection}[#2]
     \newrefcontext[sorting=ydnt]
-    \defbibheading{head}{\blocksubsection{#1}}
+    \defbibheading{head}{\blocksection{#1}}
 }
 {
     % Tell it to print out the cited commands

@@ -50,11 +50,11 @@
 \righthyphenmin=62
 
 % starting commands
-\newfont{\myfonta}{cmr10 at 9pt}
-\newfont{\myfontb}{cmr10 at 10pt}
-\newfont{\myfontc}{cmr10 at 12pt}
-\newfont{\myfontd}{cmr10 at 14pt}
-\newfont{\myfonte}{cmr10 at 16pt}
+\newcommand{\myfonta}[1]{\fontfamily{cmr}\selectfont\small#1}
+\newcommand{\myfontb}[1]{\fontfamily{cmr}\selectfont\normalsize#1}
+\newcommand{\myfontc}[1]{\fontfamily{cmr}\selectfont\large#1}
+\newcommand{\myfontd}[1]{\fontfamily{cmr}\selectfont\Large#1}
+\newcommand{\myfonte}[1]{\fontfamily{cmr}\selectfont\LARGE#1}
 
 % Remove the excess whitespace above and below the table environments in each section
 \setlength{\LTpre}{0pt}
@@ -99,7 +99,7 @@
 	\vspace{2mm}
 	\noindent
 	\textcolor{MidnightBlue}{
-{\bfseries\myfontd {#1}
+{\textbf{\myfontd {#1}}
 	\vspace*{1mm}
 	\hrule}
 	\vspace*{3mm}
@@ -111,7 +111,7 @@
     \vspace{2mm}
     \noindent
     \textcolor{MidnightBlue}{
-{\bfseries\myfontc \underline{#1}
+{\textbf{\myfontc \underline{#1}}
     \vspace*{1mm}}
     \vspace*{3mm}
     \noindent
@@ -122,14 +122,14 @@
 	\vspace{2mm}
 	\noindent
 	\textcolor{MidnightBlue}{
-{\bfseries\myfontb \underline{#1}
+{\textbf{\myfontb \underline{#1}}
 	\vspace*{1mm}}
 	\vspace*{3mm}
 	\noindent
 } } }
 
 \newcommand{\headline}[1]{{\bfseries\myfonte{#1}}}
-\newcommand{\setmainfont}[0]{\myfontb}
+\newcommand{\setmainfont}[0]{\myfonta}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -155,7 +155,7 @@
 {
     \end{longtable}
 }
-\newcommand{\skill}[2]{\noindent\raggedright{\textsc{#1}} & #2}
+\newcommand{\skill}[2]{\noindent\raggedright{#1} & #2}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -171,7 +171,7 @@
     \end{longtable}
 }
 
-\newcommand{\resumeitem}[4]{\noindent#3#4 & {\textsc{#2\newline#1}}}
+\newcommand{\resumeitem}[4]{\noindent#3#4 & {#2\newline#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -186,7 +186,7 @@
 {
     \end{longtable}
 }
-\newcommand{\activity}[5]{\hspace{-0.1in}$\circ$\hspace{0.05in}\noindent #3\newline \setlength{\parindent}{2mm} \indent\indent#4 #5 & {\textsc{#2\newline#1}}}
+\newcommand{\activity}[5]{\hspace{-0.1in}$\circ$\hspace{0.05in}\noindent #3\newline \setlength{\parindent}{2mm} \indent\indent#4 #5 & {#2\newline#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -200,7 +200,7 @@
 {
     \end{longtable}
 }
-\newcommand{\achievement}[2]{\hspace{-0.1in}$\circ$\hspace{0.05in}\noindent\raggedright{#2} & \noindent\textsc{#1}}
+\newcommand{\achievement}[2]{\hspace{-0.1in}$\circ$\hspace{0.05in}\noindent\raggedright{#2} & \noindent#1}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

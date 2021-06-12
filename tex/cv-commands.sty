@@ -23,7 +23,7 @@
 \RequirePackage{needspace}
 \RequirePackage{enumitem}
 \RequirePackage[breaklinks=true]{hyperref}
-\usepackage[backend=biber,maxbibnames=99,giveninits=true,style=ieee,sorting=ydnt]{biblatex}
+\usepackage[backend=biber,maxbibnames=99,giveninits=true,citestyle=numeric,bibstyle=ieeecv,sorting=ydnt]{biblatex}
 
 \ProcessOptions
 \relax
@@ -328,6 +328,22 @@
         }%
     }
     {\global\undef\bbx@lasthash}%
+}
+
+\newbibmacro*{arxiv}{%
+    \iffieldundef{arxiv}{}{%
+        \printfield{arxiv}
+    }
+}
+
+\DeclareFieldFormat{arxiv}{%
+    arXiv:\href{https://arxiv.org/abs/#1}{#1}
+}
+
+\renewbibmacro*{addendum+pubstate}{%
+    \iffieldundef{pubstate}{}{%
+        \printfield[parens]{pubstate}
+    }
 }
 
 % Environment to provide citations to publications

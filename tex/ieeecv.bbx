@@ -5,10 +5,12 @@
 %% E-mail: joseph.wright@morningstar2.co.uk
 %% Released under the LaTeX Project Public License v1.3c or later
 %% See http://www.latex-project.org/lppl.txt
+%%
+%% Modified by Ian McInerney for usage on a CV
 %% ---------------------------------------------------------------
 %%
 
-\ProvidesFile{ieee.bbx}[2021/03/25 v1.3e biblatex bibliography style]
+\ProvidesFile{ieeecv.bbx}[2021/03/25 v1.3e biblatex bibliography style]
 
 % Load the standard style to avoid copy-pasting unnecessary material
 \RequireBibliographyStyle{numeric-comp}
@@ -54,6 +56,11 @@
   {\bibstring{volume}\addnbspace#1}
 \DeclareFieldFormat[article,periodical]{volume}
   {\bibstring{jourvol}\addnbspace#1}
+
+% Field for the arXiv identifier
+\DeclareDatamodelFields[type=field,datatype=verbatim,nullok=true]{arxiv}
+\DeclareDatamodelEntryfields{arxiv}
+
 
 % Simple modifications to punctuation, etc.
 \renewcommand*\bibnamedash{\textemdash\textemdash}
@@ -481,6 +488,8 @@
   \usebibmacro{doi+eprint+url}%
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
+  \newunit
+  \usebibmacro{arxiv}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -672,6 +681,8 @@
   \usebibmacro{doi+eprint+url}%
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
+  \newunit
+  \usebibmacro{arxiv}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock

@@ -109,6 +109,7 @@
 
 % Create a header for a resume section
 \newcommand{\blocktitle}[1]{
+    \addcontentsline{toc}{section}{#1}
     \needspace{4\baselineskip}
     \parbox{\textwidth}{
     	\vspace{2mm}
@@ -122,6 +123,7 @@
 } }\\ }
 
 \newcommand{\blocksection}[1]{
+    \addcontentsline{toc}{subsection}{#1}
     \needspace{4\baselineskip}
     \parbox{\textwidth}{
         \vspace{2mm}
@@ -134,6 +136,7 @@
 } }\\ }
 
 \newcommand{\blocksubsection}[1]{
+    \addcontentsline{toc}{subsubsection}{#1}
     \needspace{4\baselineskip}
     \parbox{\textwidth}{
     	\vspace{2mm}
@@ -340,15 +343,9 @@
 \DeclareFieldFormat[patent]{url}{%
 }
 
-
+% Field for labeling if the significance of the paper should be visible
 \newtoggle{bib:star}
 \togglefalse{bib:star}
-
-% Field for labeling if the significance of the paper should be visible
-
-
-%\DeclareDatamodelFields[type=field,datatype=verbatim,nullok=true]{star}
-%\DeclareDatamodelEntryfields{star}
 
 \DeclareEntryOption{star}[true]{%
     \settoggle{bib:star}{#1}%
@@ -390,6 +387,33 @@
         }
     }{}
 }
+
+\newlength{\starwidth}
+\settowidth{\starwidth}{\faStar}
+
+
+\defbibenvironment{bibliography}
+{
+    \list
+    {
+        \iftoggle{bib:star}{%
+            \hspace*{-\starwidth}
+            \faStar
+        }{}
+        \printtext[labelnumberwidth]{%
+        \printfield{labelprefix}%
+        \printfield{labelnumber}}
+    }
+    {\setlength{\labelwidth}{\labelnumberwidth}%
+        \setlength{\leftmargin}{\labelwidth}%
+        \setlength{\labelsep}{\biblabelsep}%
+        \addtolength{\leftmargin}{\labelsep}%
+        \setlength{\itemsep}{\bibitemsep}%
+        \setlength{\parsep}{\bibparsep}}%
+    \renewcommand*{\makelabel}[1]{\hss##1}
+}
+{\endlist}
+{\item}
 
 % Environment to provide citations to publications
 % 1st argument is the section name

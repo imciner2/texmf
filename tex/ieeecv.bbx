@@ -63,6 +63,9 @@
 \DeclareDatamodelFields[type=field,datatype=verbatim,nullok=true]{arxiv}
 \DeclareDatamodelEntryfields{arxiv}
 
+% Field for the significance of the paper
+\DeclareDatamodelFields[type=field,datatype=literal,nullok=true]{significance}
+\DeclareDatamodelEntryfields{significance}
 
 % Simple modifications to punctuation, etc.
 \renewcommand*\bibnamedash{\textemdash\textemdash}
@@ -95,6 +98,30 @@
 
 % Support for dashed author name replacement
 \InitializeBibliographyStyle{\global\undef\bbx@lasthash}
+
+% arxiv field
+\newbibmacro*{arxiv}{%
+    \iffieldundef{arxiv}{}{%
+        \setunit{\adddot\addspace}%
+        \printfield{arxiv}
+    }
+}
+
+\DeclareFieldFormat{arxiv}{%
+    arXiv: \href{https://arxiv.org/abs/#1}{#1}
+}
+
+% significance field
+\newbibmacro*{significance}{%
+    \iffieldundef{significance}{}{%
+        \newline
+        \printfield{significance}
+    }
+}
+
+\DeclareFieldFormat{significance}{%
+    #1
+}
 
 
 % Bibliography macros
@@ -499,7 +526,8 @@
     {\usebibmacro{related:init}%
      \usebibmacro{related}}
     {}%
-  \usebibmacro{finentry}}
+  \usebibmacro{finentry}
+  \usebibmacro{significance}}
 
 \DeclareBibliographyDriver{book}{%
   \usebibmacro{bibindex}%
@@ -692,7 +720,8 @@
     {\usebibmacro{related:init}%
      \usebibmacro{related}}
     {}%
-  \usebibmacro{finentry}}
+  \usebibmacro{finentry}
+  \usebibmacro{significance}}
 
 \DeclareBibliographyDriver{online}{%
   \usebibmacro{bibindex}%

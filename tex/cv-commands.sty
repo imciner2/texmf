@@ -16,17 +16,26 @@
 
 \RequirePackage{zref-abspage,zref-lastpage}	% Allow for determination of last page
 \RequirePackage[dvipsnames,usenames]{color}
+\RequirePackage[fixed]{fontawesome5}
+\RequirePackage[dvipsnames]{xcolor}
 \RequirePackage{longtable}		% Use longtable to allow the resume entries to split across pages
 \RequirePackage{graphicx}
 \RequirePackage{fancyhdr}		% Allow for fancy footer work
 \RequirePackage{amssymb}
 \RequirePackage{needspace}
 \RequirePackage{enumitem}
+\RequirePackage{changepage}
+\RequirePackage[skins,breakable]{tcolorbox}
 \RequirePackage[breaklinks=true]{hyperref}
-\usepackage[backend=biber,maxbibnames=99,giveninits=true,citestyle=numeric,bibstyle=ieeecv,sorting=ydnt]{biblatex}
+\RequirePackage[backend=biber,maxbibnames=99,giveninits=true,citestyle=numeric,bibstyle=ieeecv,sorting=ydnt,defernumbers=true]{biblatex}
 
 \ProcessOptions
 \relax
+
+\definecolor{orcidgreen}{HTML}{A6CE39}
+\newcommand{\orcid}[1]{{\color{orcidgreen}\faOrcid} \href{https://orcid.org/#1}{#1}}
+
+\newcommand{\website}[1]{\faGlobeAmericas \href{https://#1}{#1}}
 
 \pagestyle{fancy}			% Allow the use of the fancy headers and footers
 %\renewcommand\familydefault{\sfdefault}
@@ -67,8 +76,8 @@
 \newcommand{\resumeindent}{\hspace{4mm}}
 
 % Insert pre-defined whitespace into the document
-\newcommand{\largeskip}[0]{\vspace{2.5mm}\\}
-\newcommand{\shortskip}[0]{\vspace{0.4mm}\\}
+\newcommand{\largeskip}[0]{\vspace{2.5mm}}
+\newcommand{\shortskip}[0]{\vspace{0.4mm}}
 
 \newcommand{\largeskipnoline}[0]{\vspace{2.5mm}}
 \newcommand{\shortskipnoline}[0]{\vspace{0.4mm}}
@@ -78,10 +87,15 @@
 \renewcommand{\textsc}[1]{\smcp{#1}}
 
 % Create a header with the name and contact information
-\newcommand{\header}[2]{\hspace{0cm}\begin{tabular}{p{9cm}p{8cm}}{\raggedright {\headline {#1}}}& \raggedleft{#2}\end{tabular}}
+\newcommand{\header}[2]{
+    \hspace{0cm}
+    \begin{tabular}{p{9cm}p{8cm}}
+        {\raggedright {\headline {#1}}} & \raggedleft{#2}
+    \end{tabular}
+}
 
 % Create a footer to say there is another page of information
-\newcommand{\footer}[0]
+\newcommand{\continuedfooter}[0]
 {
     \fancyhead{}
     \fancyfoot{}
@@ -95,41 +109,45 @@
 
 % Create a header for a resume section
 \newcommand{\blocktitle}[1]{
-\parbox{\textwidth}{
-	\vspace{2mm}
-	\noindent
-	\textcolor{MidnightBlue}{
-{\textbf{\myfontd {#1}}
-	\vspace*{1mm}
-	\hrule}
-	\vspace*{3mm}
-	\noindent
-} } }
+    \needspace{4\baselineskip}
+    \parbox{\textwidth}{
+    	\vspace{2mm}
+    	\noindent
+    	\textcolor{MidnightBlue}{
+    {\textbf{\myfontd {#1}}
+    	\vspace*{1mm}
+    	\hrule}
+    	\vspace*{2mm}
+    	\noindent
+} }\\ }
 
 \newcommand{\blocksection}[1]{
-\parbox{\textwidth}{
-    \vspace{2mm}
-    \noindent
-    \textcolor{MidnightBlue}{
-{\textbf{\myfontc \underline{#1}}
-    \vspace*{1mm}}
-    \vspace*{3mm}
-    \noindent
-} } }
+    \needspace{4\baselineskip}
+    \parbox{\textwidth}{
+        \vspace{2mm}
+        \noindent
+        \textcolor{MidnightBlue}{
+    {\textbf{\myfontc \underline{#1}}
+        \vspace*{1mm}}
+        \vspace*{2mm}
+        \noindent
+} }\\ }
 
 \newcommand{\blocksubsection}[1]{
-\parbox{\textwidth}{
-	\vspace{2mm}
-	\noindent
-	\textcolor{MidnightBlue}{
-{\textbf{\myfontb \underline{#1}}
-	\vspace*{1mm}}
-	\vspace*{3mm}
-	\noindent
-} } }
+    \needspace{4\baselineskip}
+    \parbox{\textwidth}{
+    	\vspace{2mm}
+    	\noindent
+    	\textcolor{MidnightBlue}{
+    {\textbf{\myfontb \underline{#1}}
+    	\vspace*{1mm}}
+    	\vspace*{2mm}
+    	\noindent
+} }\\ }
 
 \newcommand{\headline}[1]{{\bfseries\myfonte{#1}}}
 \newcommand{\setmainfont}[0]{\myfonta}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -160,76 +178,88 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Resume block to hold non-descript resume entries (example is an education section)
-
-\newenvironment{resumeblock}[1]
-{
-	\needspace{2\baselineskip}	% Say that 2 lines should be available for the environment
-    \blocktitle{#1}
-    \begin{longtable}{p{13cm}p{4cm}}
+\newcommand{\resumeitem}[4]{%
+    \begin{tcolorbox}[
+        blanker,
+        width=12.8cm,enlarge right by=4cm,
+        before skip=6pt,
+        breakable,
+        overlay unbroken and first={%
+            \node[inner sep=0pt,outer sep=0pt,text width=4cm,
+            align=none,
+            below right]
+            at ([xshift=13.1cm]frame.north west)
+            {%
+                #2\newline#1
+            };}]
+        \noindent#3
+        \vspace{0.1em}
+        \noindent#4
+    \end{tcolorbox}
+    \vspace{0.75em}
 }
-{
-    \end{longtable}
-}
-
-\newcommand{\resumeitem}[4]{\noindent#3#4 & {#2\newline#1}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Resume block to hold activities and jobs
-
-\newenvironment{activities}[1]
-{
-	\needspace{2\baselineskip}	% Say that 2 lines should be available for the environment
-    \blocktitle{#1}
-    \begin{longtable}{p{13cm}p{4cm}}
-}
-{
-    \end{longtable}
-}
-\newcommand{\activity}[5]{\hspace{-0.1in}$\circ$\hspace{0.05in}\noindent #3\newline \setlength{\parindent}{2mm} \indent\indent#4 #5 & {#2\newline#1}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Resume block to hold honors and achievements
-
-\newenvironment{achievements}[1]
-{
-    \blocktitle{#1}
-    \begin{longtable}{p{13cm}p{4cm}}
-}
-{
-    \end{longtable}
-}
-\newcommand{\achievement}[2]{\hspace{-0.1in}$\circ$\hspace{0.05in}\noindent\raggedright{#2} & \noindent#1}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Compact list to show the duties of a position
-\newenvironment{duties}
-{
-    \begin{itemize}[nolistsep,noitemsep] %{$\bullet$}
-    {\setlength\itemsep{0in}\setlength\parsep{0in}\setlength\partopsep{0in}\setlength\topsep{0in}}
+% Resume item for activities and jobs
+\newcommand{\activity}[5]{%
+    \begin{tcolorbox}[
+        blanker,
+        width=12.8cm,enlarge right by=4cm,
+        before skip=6pt,
+        breakable,
+        overlay unbroken and first={%
+            \node[inner sep=0pt,outer sep=0pt,text width=4cm,
+            align=none,
+            below right]
+            at ([xshift=13.1cm]frame.north west)
+            {%
+                #2\newline#1
+            };}]
+        $\circ$
+        \noindent #3\newline
+        \setlength{\parindent}{2mm}
+        \indent\indent#4
+        \vspace*{0.1em}
+        #5
+    \end{tcolorbox}
+    \vspace{0.75em}
 }
-{
-    \end{itemize}
-    \vspace{-3mm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Resume item for honors and achievements
+\newcommand{\achievement}[2]{%
+    \begin{tcolorbox}[
+        blanker,
+        width=12.8cm,enlarge right by=4cm,
+        before skip=6pt,
+        overlay unbroken and first={%
+            \tikzset{overlay=false}
+            \node[inner sep=0pt,outer sep=0pt,text width=4cm,
+            align=none,
+            below right]
+            at ([xshift=13.1cm]frame.north west)
+            {%
+                \noindent#1
+            };}]
+        \hspace{-0.1in}
+        $\circ$
+        \hspace{0.05in}
+        \noindent\raggedright{#2}
+    \end{tcolorbox}
 }
-\newcommand{\duty}[1]{\item #1}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Compact list to provide notes with item entries
-\newenvironment{notes}
-{
-    \begin{list}{$\bullet$}
-    {\setlength\itemsep{0in}\setlength\parsep{0in}\setlength\partopsep{0in}\setlength\topsep{0in}}
-}
-{
-    \end{list}
-    \vspace{-3mm}
-}
-\newcommand{\note}[1]{\item \myfonta{#1}}
+\newlist{notes}{enumerate}{5}
+\setlist[notes]{itemsep=0in, parsep=0in, partopsep=0in, topsep=0in, label=$\bullet$, after=\vspace{-0.75em}}
+
+\newcommand{\note}[1]{\item \interlinepenalty=100000\myfonta{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -311,6 +341,19 @@
 }
 
 
+\newtoggle{bib:star}
+\togglefalse{bib:star}
+
+% Field for labeling if the significance of the paper should be visible
+
+
+%\DeclareDatamodelFields[type=field,datatype=verbatim,nullok=true]{star}
+%\DeclareDatamodelEntryfields{star}
+
+\DeclareEntryOption{star}[true]{%
+    \settoggle{bib:star}{#1}%
+}
+
 % Remove the dashed author lines when they are the same between two lines
 \renewbibmacro*{author}{%
     \ifboolexpr{
@@ -330,33 +373,33 @@
     {\global\undef\bbx@lasthash}%
 }
 
-\newbibmacro*{arxiv}{%
-    \iffieldundef{arxiv}{}{%
-        \setunit{\adddot\addspace}%
-        \printfield{arxiv}
-    }
-}
-
-\DeclareFieldFormat{arxiv}{%
-    arXiv: \href{https://arxiv.org/abs/#1}{#1}
-}
-
 \renewbibmacro*{addendum+pubstate}{%
     \iffieldundef{pubstate}{}{%
         \printfield[italicparens]{pubstate}
     }
 }
 
+% significance field - redefine here to use changepage
+\renewbibmacro*{significance}{%
+    \iftoggle{bib:star}{%
+        \iffieldundef{significance}{}{%
+            \vspace*{0.5em}
+            \begin{adjustwidth}{1cm}{}
+                \printfield{significance}
+            \end{adjustwidth}
+        }
+    }{}
+}
+
 % Environment to provide citations to publications
 % 1st argument is the section name
 % 2nd argument is the bibliography file
-\newenvironment{publications}[2]
+\newenvironment{publications}[3]
 {
     \needspace{2\baselineskip}	% Say that 2 lines should be available for the environment
     % Create the displayed part of the environment
-%    \blocktitle{#1}
     \begin{refsection}[#2]
-    \newrefcontext[sorting=ydnt]
+    \newrefcontext[labelprefix=#3, sorting=ydnt]
     \defbibheading{head}{\blocksection{#1}}
 }
 {

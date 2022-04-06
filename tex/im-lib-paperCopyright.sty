@@ -8,11 +8,12 @@
 %           1.1 - Switched to using the background package to add the boxes to the page
 %           1.2 - Introduce a nointernal option to disable internal hyperlinks, but preserve URL links
 %           1.3 - Introduce command to add a statement to IFAC open access papers, fix some bugs
+%           1.4 - Fix bug with classes other than ifacconf
 %
 % This file is released under the Creative Commons BY-SA 4.0 license.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ProvidesPackage{im-lib-paperCopyright}[2021/05/31 v1.3 IM Library for various author copyright statements]
+\ProvidesPackage{im-lib-paperCopyright}[2022/04/06 v1.4 IM Library for various author copyright statements]
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
 
 % The background package is the main driver of the overlay containing the copyright statements
@@ -21,14 +22,17 @@
 % Some packages (like ifacconf) redefine how sections work, which conflicts with hyperref,
 % so we store the original way, load hyperref, then restore the original way.
 % https://tex.stackexchange.com/questions/393690/illegal-unit-of-measure-error-when-using-hyperref-in-the-ifacconf-class
-\let\old@ssect\@ssect  % Store how the original package defines \@ssect
+% Store how the ifacconf package defines \@ssect
+\@ifclassloaded{ifacconf}{\let\old@ssect\@ssect}{}
 
 \RequirePackage[pdftex,hypertexnames=false]{hyperref}
 
+% Restore the ifacconf way of defining section headings
+\@ifclassloaded{ifacconf}{
 \def\@ssect#1#2#3#4#5#6{%
 	\NR@gettitle{#6}% Insert key \nameref title grab
 	\old@ssect{#1}{#2}{#3}{#4}{#5}{#6} % Restore original \@ssect
-}
+}}{}
 
 
 % This is used for the DOI string generation

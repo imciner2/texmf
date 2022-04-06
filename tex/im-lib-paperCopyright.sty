@@ -8,7 +8,7 @@
 %           1.1 - Switched to using the background package to add the boxes to the page
 %           1.2 - Introduce a nointernal option to disable internal hyperlinks, but preserve URL links
 %           1.3 - Introduce command to add a statement to IFAC open access papers, fix some bugs
-%           1.4 - Fix bug with classes other than ifacconf
+%           1.4 - Fix bug with classes other than ifacconf, make nicer PDF link styles an option
 %
 % This file is released under the Creative Commons BY-SA 4.0 license.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -18,6 +18,11 @@
 
 % The background package is the main driver of the overlay containing the copyright statements
 \RequirePackage[pages=some]{background}
+
+% Hack to let the citation keys be hyperlinks in IEEE styles (based on comment in style file)
+\@ifclassloaded{cssconf}{\let\NAT@parse\undefined}{}
+\@ifclassloaded{ieeeconf}{\let\NAT@parse\undefined}{}
+\@ifclassloaded{ieeecolor}{\let\NAT@parse\undefined}{}
 
 % Some packages (like ifacconf) redefine how sections work, which conflicts with hyperref,
 % so we store the original way, load hyperref, then restore the original way.
@@ -40,6 +45,23 @@
 
 % For the nointernal option to disable hyperlinks
 \RequirePackage{letltxmacro}[2008/06/13]
+
+% Colorize the links instead of using an ugly box on them
+\DeclareOption{nolinkbox}{%
+    \hypersetup{%
+        colorlinks = true, % Colors links instead of ugly boxes
+        linkcolor={red!50!black},
+        citecolor={blue!50!black},
+        urlcolor={blue!80!black}
+    }
+}
+
+% Hide the links completely (no UI but links are still present)
+\DeclareOption{hidelinks}{%
+    \hypersetup{%
+        hidelinks
+    }
+}
 
 % Don't place internal links, only links to outside URLs (such as the DOI)
 % This code is modified from the nohyperref style file:

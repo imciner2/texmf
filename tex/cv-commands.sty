@@ -238,21 +238,14 @@
 \newcommand{\achievement}[2]{%
     \begin{tcolorbox}[
         blanker,
-        width=12.8cm,enlarge right by=4cm,
-        before skip=6pt,
-        overlay unbroken and first={%
-            \tikzset{overlay=false}
-            \node[inner sep=0pt,outer sep=0pt,text width=4cm,
-            align=none,
-            below right]
-            at ([xshift=13.1cm]frame.north west)
-            {%
-                \noindent#1
-            };}]
-        \hspace{-0.1in}
-        $\circ$
-        \hspace{0.05in}
-        \noindent\raggedright{#2}
+        sidebyside,
+        sidebyside align=top,
+        righthand width=4cm,
+        before skip=6pt]
+        \hspace{-0.1in}%
+        $\circ$ \parbox[t]{\textwidth}{\noindent#2}
+    \tcblower
+        \noindent#1        
     \end{tcolorbox}
 }
 

@@ -30,6 +30,23 @@
 \RequirePackage[breaklinks=true]{hyperref}
 \RequirePackage[backend=biber,maxbibnames=99,giveninits=true,citestyle=numeric,bibstyle=ieeecv,sorting=ydnt,defernumbers=true]{biblatex}
 
+% Colorize the links instead of using an ugly box on them
+\DeclareOption{nolinkbox}{%
+    \hypersetup{%
+        colorlinks = true, % Colors links instead of ugly boxes
+        linkcolor={red!50!black},
+        citecolor={blue!50!black},
+        urlcolor={blue!80!black}
+    }
+}
+
+% Hide the links completely (no UI but links are still present)
+\DeclareOption{hidelinks}{%
+    \hypersetup{%
+        hidelinks
+    }
+}
+
 \ProcessOptions
 \relax
 

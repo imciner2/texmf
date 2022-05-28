@@ -310,7 +310,7 @@
 % Print the labelnumber as the total number of entries in the
 % current refsection, minus the actual labelnumber, plus one
 \DeclareFieldFormat{labelnumber}{\mkbibdesc{#1}}    
-\newrobustcmd*{\mkbibdesc}[1]{%
+\newrobustcmd*{\mkbibdesc}[1]{%Journals
     \number\numexpr\csuse{entrycount:\therefsection}+1-#1\relax}
 
 % These two commands will highlight an authors name in bold

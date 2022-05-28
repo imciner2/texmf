@@ -358,13 +358,13 @@
     }
 }
 \DeclareFieldFormat[thesis]{url}{%
-    \usebibmacro{thesisurl}{#1}
+    \usebibmacro{thesisurl}{\nolinkurl{#1}}
 }
 
 % Modify the patent number to be a hyperlink if the URL field is populated
 \newbibmacro{patenturl}[1]{%
     \iffieldundef{url}{#1}{%
-        \href{\thefield{url}}{#1}
+        \href{\thefield{url}}{\nolinkurl{#1}}
     }
 }
 \DeclareFieldFormat[patent]{number}{%

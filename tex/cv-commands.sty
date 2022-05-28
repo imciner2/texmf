@@ -50,6 +50,9 @@
 \ProcessOptions
 \relax
 
+% Format links in the same font as the rest of the document.
+\urlstyle{same}
+
 \definecolor{orcidgreen}{HTML}{A6CE39}
 \newcommand{\orcid}[1]{{\color{orcidgreen}\faOrcid} \href{https://orcid.org/#1}{#1}}
 
@@ -337,16 +340,16 @@
     { #1 }
 }
 
-% Modify the DOI field to be a hyperlink if the field exists
-% These are not actually needed since by default it is a hyperlink
-%\newbibmacro{doiurl}[1]{%
-%    \iffieldundef{doi}{}{%
-%        doi:\href{http://dx.doi.org/\thefield{doi}}{#1}
-%    }
-%}
-%\DeclareFieldFormat{doi}{%
-%    \usebibmacro{doiurl}{#1}
-%}
+% Modify the DOI field to be a hyperlink in the normal document font if the field
+% exists.
+\newbibmacro{doiurl}[1]{%
+    \iffieldundef{doi}{}{%
+        doi: \href{https://dx.doi.org/\thefield{doi}}{\nolinkurl{#1}}
+    }
+}
+\DeclareFieldFormat{doi}{%
+    \usebibmacro{doiurl}{#1}
+}
 
 % Modify the thesis URL to remove the tag "[Online]" from it
 \newbibmacro{thesisurl}[1]{%

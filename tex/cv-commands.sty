@@ -9,11 +9,12 @@
 %			1.4 - Added sections for citations
 %			1.5 - Modified citations section style
 %			1.6 - Reverse the numbering in the publications so newest are highest number
+%           1.7 - Change publication sorting options and redo the item interfaces
 %
 % This file is released under the Creative Commons BY-SA 4.0 license.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ProvidesPackage{cv-commands}[2021/09/09 version 1.6 Resume Commands]
+\ProvidesPackage{cv-commands}[2022/08/11 version 1.7 Resume Commands]
 
 \RequirePackage{zref-abspage,zref-lastpage}	% Allow for determination of last page
 \RequirePackage[dvipsnames,usenames]{color}
@@ -51,6 +52,43 @@
 
 \ProcessOptions
 \relax
+
+% Declare a sorting template that also takes into account the month
+\DeclareSortingTemplate{ymdntv}{
+    \sort{
+        \field{presort}
+    }
+    \sort[final]{
+        \field{sortkey}
+    }
+    \sort[direction=descending]{
+        \field{sortyear}
+        \field{year}
+    }
+    \sort[direction=descending]{
+        \field[padside=left,padwidth=2,padchar=0]{month}
+        \literal{00}
+    }
+    \sort[direction=descending]{
+        \field[padside=left,padwidth=2,padchar=0]{day}
+        \literal{00}
+    }
+    \sort{
+        \field{sortname}
+        \field{author}
+        \field{editor}
+        \field{translator}
+        \field{sorttitle}
+        \field{title}
+    }
+    \sort{
+        \field{sorttitle}
+    }
+    \sort[direction=descending]{
+        \field[padside=left,padwidth=4,padchar=0]{volume}
+        \literal{0000}
+    }
+}
 
 % Format links in the same font as the rest of the document.
 \urlstyle{same}
@@ -342,7 +380,7 @@
 
 % Print the labelnumber as the total number of entries in the
 % current refsection, minus the actual labelnumber, plus one
-\DeclareFieldFormat{labelnumber}{\mkbibdesc{#1}}    
+\DeclareFieldFormat{labelnumber}{\mkbibdesc{#1}}
 \newrobustcmd*{\mkbibdesc}[1]{%Journals
     \number\numexpr\csuse{entrycount:\therefsection}+1-#1\relax}
 
@@ -468,12 +506,14 @@
 % Environment to provide citations to publications
 % 1st argument is the section name
 % 2nd argument is the bibliography file
-\newenvironment{publications}[3]
+% 3rd argument is the label prefix
+% 4th argument is the sorting scheme
+\newenvironment{publications}[4]
 {
     \needspace{2\baselineskip}	% Say that 2 lines should be available for the environment
     % Create the displayed part of the environment
     \begin{refsection}[#2]
-    \newrefcontext[labelprefix=#3, sorting=ydnt]
+    \newrefcontext[labelprefix=#3, sorting=#4]
     \defbibheading{head}{\blocksection{#1}}
 }
 {

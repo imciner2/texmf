@@ -26,6 +26,8 @@
 \RequirePackage{needspace}
 \RequirePackage{enumitem}
 \RequirePackage{changepage}
+\RequirePackage{twoopt}
+\RequirePackage{ifthen}
 \RequirePackage[skins,breakable]{tcolorbox}
 \RequirePackage[breaklinks=true]{hyperref}
 \RequirePackage[backend=biber,maxbibnames=99,giveninits=true,citestyle=numeric,bibstyle=ieeecv,sorting=ydnt,defernumbers=true]{biblatex}
@@ -130,6 +132,7 @@
 
 % Create a header for a resume section
 \newcommand{\blocktitle}[1]{
+    \phantomsection
     \addcontentsline{toc}{section}{#1}
     \needspace{4\baselineskip}
     \parbox{\textwidth}{
@@ -255,20 +258,37 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Resume item for honors and achievements
-\newcommand{\achievement}[2]{%
-    \begin{tcolorbox}[
-        blanker,
-        sidebyside,
-        sidebyside align=top,
-        righthand width=4cm,
-        before skip=6pt]
-        \hspace{-0.1in}%
-        $\circ$ \parbox[t]{\textwidth}{\noindent#2}
-    \tcblower
-        \noindent#1        
-    \end{tcolorbox}
+\newcommandtwoopt{\bulletitem}[4][6pt][4cm]{%
+    \ifthenelse{ \equal{#3}{} }{%
+    \begin{tcolorbox}[blanker,
+                      before skip=#1]
+            $\circ$ \parbox[t]{\textwidth}{\noindent#4}
+    \end{tcolorbox}}{%
+    \begin{tcolorbox}[blanker,
+                      sidebyside,
+                      sidebyside align=top,
+                      righthand width=#2,
+                      before skip=#1]
+            $\circ$ \parbox[t]{\textwidth}{\noindent#4}
+        \tcblower
+            \noindent#3
+    \end{tcolorbox}}%
 }
 
+
+% Resume item for honors and achievements
+\newcommand{\achievement}[2]{%
+    \begin{tcolorbox}[
+    blanker,
+    sidebyside,
+    sidebyside align=top,
+    righthand width=4cm,
+    before skip=6pt]
+        $\circ$ \parbox[t]{\textwidth}{\noindent#1}
+    \tcblower
+        \noindent#2
+    \end{tcolorbox}
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -439,6 +439,15 @@
     \settoggle{bib:star}{#1}%
 }
 
+% Field for labeling if the paper is in preparation currently
+\newtoggle{bib:inprep}
+\togglefalse{bib:inprep}
+
+\DeclareEntryOption{inprep}[true]{%
+	\settoggle{bib:inprep}{#1}%
+}
+
+
 % Remove the dashed author lines when they are the same between two lines
 \renewbibmacro*{author}{%
     \ifboolexpr{
@@ -456,6 +465,14 @@
         }%
     }
     {\global\undef\bbx@lasthash}%
+}
+
+\renewbibmacro*{journal}{%
+	\iftoggle{bib:inprep}{%
+		\setunit{\addcomma\space}%
+		\printtext{\textit{Planned submission to}}
+		\printfield{journaltitle}
+	}{\printfield{journaltitle}}
 }
 
 \renewbibmacro*{addendum+pubstate}{%

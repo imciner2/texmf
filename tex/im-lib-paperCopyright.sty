@@ -9,11 +9,12 @@
 %           1.2 - Introduce a nointernal option to disable internal hyperlinks, but preserve URL links
 %           1.3 - Introduce command to add a statement to IFAC open access papers, fix some bugs
 %           1.4 - Fix bug with classes other than ifacconf, make nicer PDF link styles an option
+%           1.5 - Introduce ACM copyright statement
 %
 % This file is released under the Creative Commons BY-SA 4.0 license.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ProvidesPackage{im-lib-paperCopyright}[2022/04/06 v1.4 IM Library for various author copyright statements]
+\ProvidesPackage{im-lib-paperCopyright}[2023/05/10 v1.5 IM Library for various author copyright statements]
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
 
 % The background package is the main driver of the overlay containing the copyright statements
@@ -30,7 +31,8 @@
 % Store how the ifacconf package defines \@ssect
 \@ifclassloaded{ifacconf}{\let\old@ssect\@ssect}{}
 
-\RequirePackage[pdftex,hypertexnames=false]{hyperref}
+\RequirePackage{hyperref}
+\hypersetup{pdftex,hypertexnames=false}
 
 % Restore the ifacconf way of defining section headings
 \@ifclassloaded{ifacconf}{
@@ -114,6 +116,10 @@
 % The box that surrounds the copyright notice
 \def\copyrightBox#1{\fbox{\parbox{\dimexpr\textwidth-\fboxsep-\fboxrule\relax}{#1}}}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% IEEE Copyright Statements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Create a command to place copyright text into the document of an IEEE paper
 % The command goes: \IEEEcopyrightnotice{year}{doi}
 \newcommand{\IEEEcopyrighttext}[2]{%
@@ -137,6 +143,11 @@
     }
     \BgThispage
 }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% IFAC Copyright Statements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Create a command to place copyright text into the document of an IFAC paper
 % The command goes: \IFACcopyrightnotice{year}{doi}{publicationName}
@@ -173,6 +184,30 @@
 		nodeanchor=south,    % Anchor on the south of the background image
 		vshift=60pt,         % Shift up by 45pt
 		contents={\copyrightBox{\IFACopenaccesstext{#1}{#2}{#3}}}
+	}
+	\BgThispage
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ACM Copyright Statements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Create a command to place copyright text into the document of an ACM paper
+% The command goes: \ACMcopyrightnotice{year}{doi}{publicationName}
+\newcommand{\ACMcopyrighttext}[3]{%
+	\footnotesize \textcopyright #1 The author(s) #1. This is the author's version of the work. It is posted here for your personal use. Not for redistribution. The definitive Version of Record was published in #3, \doinotice{#2}.%
+}
+
+\newcommand{\ACMcopyrightnotice}[3]{%
+	\backgroundsetup{%
+		scale=1,             % Don't scale the text
+		color=black,         % Black text
+		opacity=1,           % No opacity
+		placement=bottom,    % Bottom of the page
+		nodeanchor=south,    % Anchor on the south of the background image
+		vshift=10pt,         % Shift up by 10pt
+		contents={\copyrightBox{\ACMcopyrighttext{#1}{#2}{#3}}}
 	}
 	\BgThispage
 }

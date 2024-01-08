@@ -58,6 +58,7 @@
   {\bibstring{jourvol}\addnbspace#1}
 
 \DeclareFieldFormat{italicparens}{(\mkbibemph{#1})}
+\DeclareFieldFormat{italic}{\mkbibemph{#1}}
 
 % Field for the arXiv identifier
 \DeclareDatamodelFields[type=field,datatype=verbatim,nullok=true]{arxiv}
@@ -193,7 +194,7 @@
     {}
     {%
       \bibstring{presentedat}%
-      \printfield{eventtitle}%
+      \printfield[italic]{eventtitle}%
     }%
   \ifboolexpr{
     test {\iffieldundef{venue}}

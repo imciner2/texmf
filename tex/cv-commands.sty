@@ -121,6 +121,7 @@
 \righthyphenmin=62
 
 % starting commands
+\newcommand{\myfont}[1]{\fontfamily{cmr}\selectfont#1}
 \newcommand{\myfonta}[1]{\fontfamily{cmr}\selectfont\small#1}
 \newcommand{\myfontb}[1]{\fontfamily{cmr}\selectfont\normalsize#1}
 \newcommand{\myfontc}[1]{\fontfamily{cmr}\selectfont\large#1}
@@ -194,7 +195,7 @@
         \textcolor{MidnightBlue}{
     {\textbf{\myfontc \underline{#1}}
         \vspace*{1mm}}
-        \vspace*{2mm}
+        %\vspace*{2mm}
         \noindent
 } }\\ }
 
@@ -207,7 +208,7 @@
     	\textcolor{MidnightBlue}{
     {\textbf{\myfontb \underline{#1}}
     	\vspace*{1mm}}
-    	\vspace*{2mm}
+    	%\vspace*{2mm}
     	\noindent
 } }\\ }
 
@@ -335,7 +336,7 @@
 \newlist{notes}{enumerate}{5}
 \setlist[notes]{itemsep=0in, parsep=0in, partopsep=0in, topsep=0in, label=$\bullet$, after=\vspace{-0.75em}}
 
-\newcommand{\note}[1]{\item \interlinepenalty=100000\myfonta{#1}}
+\newcommand{\note}[1]{\item \interlinepenalty=100000\myfont{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -432,12 +433,20 @@
 \DeclareFieldFormat[patent]{url}{%
 }
 
-% Field for labeling if the significance of the paper should be visible
+% Field for labeling if the paper should have a star displayed
 \newtoggle{bib:star}
 \togglefalse{bib:star}
 
 \DeclareEntryOption{star}[true]{%
     \settoggle{bib:star}{#1}%
+}
+
+% Field for labeling if the significance of the paper should be visible
+\newtoggle{bib:significance}
+\togglefalse{bib:significance}
+
+\DeclareEntryOption{significance}[true]{%
+	\settoggle{bib:significance}{#1}%
 }
 
 % Field for labeling if the paper is in preparation currently
@@ -483,11 +492,12 @@
 
 % significance field - redefine here to use changepage
 \renewbibmacro*{significance}{%
-    \iftoggle{bib:star}{%
+    \iftoggle{bib:significance}{%
         \iffieldundef{significance}{}{%
             \vspace*{0.5em}
             \begin{adjustwidth}{1cm}{}
-                \printfield{significance}
+            	\hspace*{-\starwidth}
+                \faStar\printfield{significance}
             \end{adjustwidth}
         }
     }{}
@@ -514,7 +524,8 @@
         \setlength{\labelsep}{\biblabelsep}%
         \addtolength{\leftmargin}{\labelsep}%
         \setlength{\itemsep}{\bibitemsep}%
-        \setlength{\parsep}{\bibparsep}}%
+        \setlength{\parsep}{\bibparsep}%
+        \setlength{\partopsep}{0pt}}%
     \renewcommand*{\makelabel}[1]{\hss##1}
 }
 {\endlist}
@@ -531,7 +542,7 @@
     % Create the displayed part of the environment
     \begin{refsection}[#2]
     \newrefcontext[labelprefix=#3, sorting=#4]
-    \defbibheading{head}{\blocksection{#1}}
+    \defbibheading{head}{\blocksection{#1}\vspace{-1em}}
 }
 {
     % Tell it to print out the cited commands

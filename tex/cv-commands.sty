@@ -10,11 +10,12 @@
 %			1.5 - Modified citations section style
 %			1.6 - Reverse the numbering in the publications so newest are highest number
 %           1.7 - Change publication sorting options and redo the item interfaces
+%           1.8 - Redo publications environment to use options now, handle significance and star through categories
 %
 % This file is released under the Creative Commons BY-SA 4.0 license.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ProvidesPackage{cv-commands}[2022/08/11 version 1.7 Resume Commands]
+\ProvidesPackage{cv-commands}[2025/05/25 version 1.8 Resume Commands]
 
 \RequirePackage{zref-abspage,zref-lastpage}	% Allow for determination of last page
 \RequirePackage[dvipsnames,usenames]{color}
@@ -32,6 +33,8 @@
 \RequirePackage[skins,breakable]{tcolorbox}
 \RequirePackage[breaklinks=true]{hyperref}
 \RequirePackage[backend=biber,maxbibnames=99,giveninits=true,citestyle=numeric,bibstyle=ieeecv,sorting=ydnt,defernumbers=true]{biblatex}
+\RequirePackage{environ}
+\RequirePackage{xkeyval}
 
 % Colorize the links instead of using an ugly box on them
 \DeclareOption{nolinkbox}{%
@@ -49,6 +52,13 @@
         hidelinks
     }
 }
+
+% Options for the publications environment
+\define@key[CV]{publications}{prefix}{\def\pubprefix{#1}}
+\define@key[CV]{publications}{sorting}{\def\pubsorting{#1}}
+
+% Default keys
+\setkeys[CV]{publications}{prefix=,sorting=ydnt}
 
 \ProcessOptions
 \relax
@@ -490,35 +500,40 @@
     }
 }
 
+\newlength{\starwidth}
+\settowidth{\starwidth}{\faStar}
+
+\newlength{\bubblewidth}
+\settowidth{\bubblewidth}{\faComment[regular]}
+
+\DeclareBibliographyCategory{star}
+\DeclareBibliographyCategory{significant}
+
 % significance field - redefine here to use changepage
 \renewbibmacro*{significance}{%
-    \iftoggle{bib:significance}{%
+    \ifcategory{significant}{%
         \iffieldundef{significance}{}{%
             \vspace*{0.5em}
             \begin{adjustwidth}{1cm}{}
-            	\hspace*{-\starwidth}
-                \faStar\printfield{significance}
+            	\hspace*{-1.15\bubblewidth}
+                \faComment[regular]\printfield{significance}
             \end{adjustwidth}
         }
     }{}
 }
 
-\newlength{\starwidth}
-\settowidth{\starwidth}{\faStar}
-
-
 \defbibenvironment{bibliography}
 {
     \list
     {
-        \iftoggle{bib:star}{%
-            \hspace*{-\starwidth}
-            \faStar
-        }{}
+        \ifcategory{star}{%
+            \hspace*{-\starwidth}%
+            \faStar%
+        }{}%
         \printtext[labelnumberwidth]{%
         \printfield{labelprefix}%
-        \printfield{labelnumber}}
-    }
+        \printfield{labelnumber}}%
+    }%
     {\setlength{\labelwidth}{\labelnumberwidth}%
         \setlength{\leftmargin}{\labelwidth}%
         \setlength{\labelsep}{\biblabelsep}%
@@ -526,28 +541,30 @@
         \setlength{\itemsep}{\bibitemsep}%
         \setlength{\parsep}{\bibparsep}%
         \setlength{\partopsep}{0pt}}%
-    \renewcommand*{\makelabel}[1]{\hss##1}
+    \renewcommand*{\makelabel}[1]{\hss##1}%
 }
 {\endlist}
 {\item}
 
+
 % Environment to provide citations to publications
-% 1st argument is the section name
-% 2nd argument is the bibliography file
-% 3rd argument is the label prefix
-% 4th argument is the sorting scheme
-\newenvironment{publications}[4]
-{
-    \needspace{2\baselineskip}	% Say that 2 lines should be available for the environment
+% 1st argument are options
+% 2nd argument is the section name
+% 3rd argument is the bibliography file
+\NewEnviron{publications}[3][]
+{%
+	\begingroup%
+	\setkeys[CV]{publications}{#1}%
+    \needspace{2\baselineskip}%	% Say that 2 lines should be available for the environment
     % Create the displayed part of the environment
-    \begin{refsection}[#2]
-    \newrefcontext[labelprefix=#3, sorting=#4]
-    \defbibheading{head}{\blocksection{#1}\vspace{-1em}}
-}
-{
+	\begin{refsection}[#3]%
+	\newrefcontext[labelprefix=\pubprefix, sorting=\pubsorting]%
+	\defbibheading{head}{\blocksection{#2}\vspace{-1em}}%
     % Tell it to print out the cited commands
-    \printbibliography[heading=head]
-    \end{refsection}
+	\BODY%
+	\printbibliography[heading=head]%
+	\end{refsection}%
+	\endgroup%
 }
 
 
